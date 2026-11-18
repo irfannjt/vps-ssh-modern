@@ -2,7 +2,6 @@
 Description=VPS SSH Modern API
 After=network-online.target postgresql.service
 Wants=network-online.target
-
 [Service]
 Type=simple
 User=vpsssh-api
@@ -17,6 +16,5 @@ PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
 ReadWritePaths=/var/lib/vps-ssh-modern
-
 [Install]
 WantedBy=multi-user.target
