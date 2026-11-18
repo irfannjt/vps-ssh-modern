@@ -8,9 +8,8 @@ function runHelper(args: string[], secret?: string): Promise<void> {
     let stderr = "";
     child.stderr.setEncoding("utf8").on("data", chunk => { stderr += chunk; });
     child.on("error", reject);
-    child.on("close", code => code === 0 ? resolve() : reject(new Error(stderr || \`helper exited \${code}\`)));
-    if (secret !== undefined) child.stdin.end(secret + "\n");
-    else child.stdin.end();
+    child.on("close", code => code === 0 ? resolve() : reject(new Error(stderr || "helper exited " + code)));
+    if (secret !== undefined) child.stdin.end(secret + "\n"); else child.stdin.end();
   });
 }
 export async function createLinuxAccount(username: string, password: string): Promise<void> {
