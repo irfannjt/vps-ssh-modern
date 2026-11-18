@@ -6,7 +6,7 @@ const usernameSchema=z.string().regex(/^[a-z_][a-z0-9_-]{2,31}$/);
 async function auth(request:any,reply:any){try{await request.jwtVerify();}catch{return reply.code(401).send({error:"Unauthorized"});}}
 export async function accountRoutes(app:FastifyInstance){
  app.addHook("preHandler",auth);
- app.get("/",async request=>{const actor=request.user as {sub:string;role:string};if(!["ADMIN","RESELLER"].includes(actor.role))return {error:"Forbidden"};return prisma.sshAccount.findMany({where:actor.role==="ADMIN"?{}:{owner:{resellerId:actor.sub}},select:{id:true,username:true,expiresAt:true,maxSessions:true,status:true,isTrial:true}});});
+ app.get("/",async request=>{const actor=request.user as {sub:string;role:string};if(!["ADMIN","RESELLER"].includes(actor.role))return {error:"Forbidden"};return prisma.sshAccount.findMany({where:actor.role==="ADMIN"?{}:{ownerId:actor.sub},select:{id:true,username:true,expiresAt:true,maxSessions:true,status:true,isTrial:true}});});
  app.post("/",async(request,reply)=>{
   const actor=request.user as {sub:string;role:string};if(!["ADMIN","RESELLER"].includes(actor.role))return reply.code(403).send({error:"Forbidden"});
   const parsed=z.object({username:usernameSchema,password:z.string().min(12).max(128),expiresAt:z.coerce.date(),maxSessions:z.number().int().min(1).max(10).default(1),isTrial:z.boolean().default(false)}).safeParse(request.body);
