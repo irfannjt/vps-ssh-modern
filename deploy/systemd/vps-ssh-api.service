@@ -11,7 +11,6 @@ EnvironmentFile=/etc/vps-ssh-modern/api.env
 ExecStart=/usr/bin/node /opt/vps-ssh-modern/backend/dist/server.js
 Restart=on-failure
 RestartSec=5
-NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
