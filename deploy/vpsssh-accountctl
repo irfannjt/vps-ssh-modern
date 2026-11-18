@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 PATH=/usr/sbin:/usr/bin:/sbin:/bin
-ACTION="\${1:-}"
-USERNAME="\${2:-}"
+ACTION="${1:-}"
+USERNAME="${2:-}"
 [[ "$USERNAME" =~ ^[a-z_][a-z0-9_-]{2,31}$ ]] || { echo "invalid username" >&2; exit 2; }
 case "$ACTION" in
   create)
     [[ "$#" -eq 2 ]] || exit 2
     IFS= read -r PASSWORD || { echo "password required on stdin" >&2; exit 2; }
-    [[ "\${#PASSWORD}" -ge 12 && "\${#PASSWORD}" -le 128 ]] || exit 2
+    [[ "${#PASSWORD}" -ge 12 && "${#PASSWORD}" -le 128 ]] || exit 2
     if id "$USERNAME" >/dev/null 2>&1; then echo "user exists" >&2; exit 3; fi
     useradd --create-home --shell /bin/bash "$USERNAME"
     printf '%s:%s\n' "$USERNAME" "$PASSWORD" | chpasswd
@@ -19,8 +19,5 @@ case "$ACTION" in
     id "$USERNAME" >/dev/null 2>&1 || exit 0
     userdel --remove "$USERNAME"
     ;;
-  *)
-    echo "usage: vpsssh-accountctl {create USER|delete USER}" >&2
-    exit 2
-    ;;
+  *) echo "usage: vpsssh-accountctl {create USER|delete USER}" >&2; exit 2 ;;
 esac
