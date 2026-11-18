@@ -1,0 +1,22 @@
+[Unit]
+Description=VPS SSH Modern API
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=vpsssh-api
+Group=vpsssh-api
+WorkingDirectory=/opt/vps-ssh-modern/backend
+EnvironmentFile=/etc/vps-ssh-modern/api.env
+ExecStart=/usr/bin/node /opt/vps-ssh-modern/backend/dist/server.js
+Restart=on-failure
+RestartSec=5
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/vps-ssh-modern
+
+[Install]
+WantedBy=multi-user.target

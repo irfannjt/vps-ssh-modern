@@ -1,0 +1,2 @@
+# Review before installing. Replace service identity as appropriate.
+vpsssh-api ALL=(root) NOPASSWD: /usr/local/sbin/vpsssh-accountctl
