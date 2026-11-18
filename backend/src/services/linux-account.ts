@@ -4,7 +4,7 @@ const USERNAME = /^[a-z_][a-z0-9_-]{2,31}$/;
 function runHelper(args: string[], secret?: string): Promise<void> {
   if (!config.SYSTEM_ACCOUNT_MANAGEMENT) throw new Error("System account management is disabled");
   return new Promise((resolve, reject) => {
-    const child = spawn("sudo", [config.ACCOUNT_HELPER_PATH, ...args], { shell: false, stdio: ["pipe", "ignore", "pipe"] });
+    const child = spawn("sudo", ["-n", config.ACCOUNT_HELPER_PATH, ...args], { shell: false, stdio: ["pipe", "ignore", "pipe"] });
     let stderr = "";
     child.stderr.setEncoding("utf8").on("data", chunk => { stderr += chunk; });
     child.on("error", reject);
